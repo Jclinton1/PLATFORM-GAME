@@ -63,6 +63,8 @@ const animate = () => {
       player.velocity.x = 5;
   } else if (keys.leftKey.pressed && player.position.x > 100) {
       player.velocity.x = -5;
+  } else {
+    player.velocity.x = 0;
   }
 };
 
@@ -74,6 +76,36 @@ const keys = {
     pressed: false,
   },
 };
+
+const movePlayer = (key, xVelocity, isPressed) => {
+  if (!isCheckpointCollisionDetectionActive) {
+    player.velocity.x = 0;
+    player.velocity.y = 0;
+    return;
+  }
+
+  switch (key) {
+    case "ArrowLeft": keys.leftKey.pressed = isPressed;
+      if (xVelocity === 0) {
+        player.velocity.x = xVelocity;
+      }
+
+      player.velocity.x -= xVelocity;
+      break;
+
+    case "ArrowUp": player.velocity.y -= 8;
+    break;
+
+    case "": player.velocity.y -= 8;
+    break;
+
+    case "Spacebar": player.velocity.y -=8;
+    break;
+  
+    default:
+      break;
+  }
+}
 
 const startGame = () => {
   canvas.style.display = "block";
