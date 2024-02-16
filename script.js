@@ -52,7 +52,42 @@ class Player {
   }
 }
 
+class Platform {
+  constructor(x, y) {
+    this.position = {
+      x,
+      y,
+    };
+    this.width = 200;
+    this.height = 40;
+  }
+  draw() {
+    ctx.fillStyle = "#acd157";
+    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+}
+
 const player = new Player();
+
+const platformPositions = [
+  { x: 500, y: 450 },
+  { x: 700, y: 400 },
+  { x: 850, y: 350 },
+  { x: 900, y: 350 },
+  { x: 1050, y: 150 },
+  { x: 2500, y: 450 },
+  { x: 2900, y: 400 },
+  { x: 3150, y: 350 },
+  { x: 3900, y: 450 },
+  { x: 4200, y: 400 },
+  { x: 4400, y: 200 },
+  { x: 4700, y: 150 }
+];
+
+const platforms = platformPositions.map(
+  (platform) => new Platform(platform.x, platform.y)
+  );
+  
 
 const animate = () => {
   requestAnimationFrame(animate);
@@ -101,6 +136,12 @@ const movePlayer = (key, xVelocity, isPressed) => {
 
     case "Spacebar": player.velocity.y -=8;
     break;
+
+    case "ArrowRight": keys.rightKey.pressed = isPressed
+    if (xVelocity === 0) {
+      player.velocity.x =xVelocity;
+    }
+    player.velocity.x += xVelocity;
   
     default:
       break;
@@ -110,7 +151,15 @@ const movePlayer = (key, xVelocity, isPressed) => {
 const startGame = () => {
   canvas.style.display = "block";
   startScreen.style.display = "none";
-  player.draw();
+  animate();
 };
 
-startBtn.addEventListener("click", startGame());
+startBtn.addEventListener("click", startGame);
+
+window.addEventListener("keydown", ({ key }) => {
+  movePlayer(key, 8, true);
+});
+
+window.addEventListener("keyup", ({ key }) => {
+  movePlayer(key, 0, false);
+});
