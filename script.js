@@ -71,8 +71,20 @@ class CheckPoint {
   constructor(x, y) {
     this.position = {
       x,y
-    }
+    };
+    this.width = 40;
+    this.height = 70;
   };
+
+  draw() {
+    ctx.fillStyle = "#f1be32";
+    ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+  claim() {
+    this.width = 0;
+    this.height = 0;
+    this.position.y = Infinity;
+  }
 };
 
 const player = new Player();
@@ -186,7 +198,13 @@ checkpoints.forEach((checkpoint, index) => {
   ];
 
   if (checkpointDetectionRules.every((rule) => rule)) {
+    checkpoint.claim();
 
+    if (index === checkpoints.length - 1) {
+      isCheckpointCollisionDetectionActive = false;
+      showCheckpointScreen("You reached the final checkpoint!");
+      movePlayer("ArrowRight", 0, false);
+    }
   };
 });
 }
